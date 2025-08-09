@@ -60,8 +60,16 @@ ng build --configuration production
 
 ## Deploy to Netlify
 
-- Build Command: `ng build --configuration production`
-- Publish Directory: `dist/fitness-class-scheduler`
+- Build Command: `npm run build` (or `ng build --configuration production`)
+- Publish Directory: `dist/fitness-class-scheduler/browser`
+
+If you use a Netlify config file, add this `netlify.toml` at the repo root:
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist/fitness-class-scheduler/browser"
+```
 
 ## SEO
 
