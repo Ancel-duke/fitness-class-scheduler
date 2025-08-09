@@ -1,0 +1,43 @@
+<main class="container mx-auto px-4 py-8">
+  <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">{{ message }}</h2>
+    <div class="inline-flex rounded-md shadow-sm overflow-hidden">
+      <button type="button" (click)="viewMode.set('table')" class="px-3 py-2 text-sm font-medium border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition" [class.bg-blue-600]="viewMode() === 'table'" [class.text-white]="viewMode() === 'table'">Table View</button>
+      <button type="button" (click)="viewMode.set('card')" class="px-3 py-2 text-sm font-medium border-t border-b border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition -ml-px" [class.bg-blue-600]="viewMode() === 'card'" [class.text-white]="viewMode() === 'card'">Card View</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="order-1 lg:order-none">
+      <app-add-class-form (addClass)="handleAddClass($event)"></app-add-class-form>
+    </div>
+    <div class="order-2 lg:order-none">
+      <ng-container *ngIf="classes().length; else empty">
+        <ng-container *ngIf="viewMode() === 'table'; else cards">
+          <app-schedule-table [classes]="classes()" (removeClass)="handleRemoveClass($event)"></app-schedule-table>
+        </ng-container>
+        <ng-template #cards>
+          <section class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+            <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Schedule</h2>
+            <div class="space-y-6">
+              <div *ngFor="let day of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">
+                <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">{{ day }}</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <ng-container *ngFor="let item of grouped()[day]">
+                    <app-class-card [className]="item.className" [day]="item.day" [time]="item.time"></app-class-card>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ng-template>
+      </ng-container>
+      <ng-template #empty>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 text-center">
+          <div class="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-3 text-gray-500">🏷️</div>
+          <div class="text-gray-500">No classes scheduled yet</div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</main>
